@@ -110,8 +110,6 @@ class BookController extends Controller
         $data["image"] = $image;
         $book->update($data);
 
-        $book->update($request->validated());
-
         return redirect()->route("home")
             ->with("success", "Libro aggiornato con successo!");
     }
