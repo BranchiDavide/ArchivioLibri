@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Book extends Model
 {
     use HasFactory;
-    protected $fillable = ["title", "description", "pages", "author_id", "category_id"];
+    protected $fillable = ["title", "description", "pages", "author_id", "category_id", "image"];
     public function author(): BelongsTo{
         return $this->belongsTo(Author::class);
     }

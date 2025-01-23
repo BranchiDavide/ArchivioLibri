@@ -35,6 +35,7 @@ class DbSeeder extends Seeder
                 'category_id' => 1, // Romanzo
                 'created_at' => now(),
                 'updated_at' => now(),
+                'image' => 'img/no-cover.webp',
             ],
             [
                 'title' => 'Le città invisibili',
@@ -44,6 +45,7 @@ class DbSeeder extends Seeder
                 'category_id' => 2, // Saggio
                 'created_at' => now(),
                 'updated_at' => now(),
+                'image' => 'img/no-cover.webp',
             ],
             [
                 'title' => 'I Promessi Sposi',
@@ -53,6 +55,7 @@ class DbSeeder extends Seeder
                 'category_id' => 3, // Storico
                 'created_at' => now(),
                 'updated_at' => now(),
+                'image' => 'img/no-cover.webp',
             ],
         ]);
     }

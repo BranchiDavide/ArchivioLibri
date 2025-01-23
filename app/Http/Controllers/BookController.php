@@ -7,7 +7,10 @@ use App\Http\Requests\UpdateBookRequest;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Utils\ImgStoreManager;
+use Illuminate\Support\Str;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class BookController extends Controller
 {
@@ -36,7 +39,26 @@ class BookController extends Controller
      */
     public function store(StoreBookRequest $request)
     {
-        Book::create($request->validated());
+        $book = new Book($request->validated());
+        $image = null;
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $imgName = Str::uuid() . '.' . $request->file('image')->getClientOriginalExtension();
+
+            $imgPath = public_path('img/' . $imgName);
+
+            $manager = new ImageManager(new Driver());
+            $imgRes = $manager->read($request->file("image"));
+            $imgRes->resize(400, 520);
+            $imgRes->save($imgPath);
+
+            $image = "img/" . $imgName;
+        } else {
+            $image = "img/no-cover.webp";
+        }
+
+        $book->image = $image;
+        $book->save();
 
         return redirect()->route("home")
             ->with("success", "Libro aggiunto con successo!");
@@ -66,6 +88,28 @@ class BookController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
+        $data = $request->validated();
+        $image = null;
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $imgName = Str::uuid() . '.' . $request->file('image')->getClientOriginalExtension();
+
+            $imgPath = public_path('img/' . $imgName);
+
+            $manager = new ImageManager(new Driver());
+            $imgRes = $manager->read($request->file("image"));
+            $imgRes->resize(400, 520);
+            $imgRes->save($imgPath);
+
+            $image = "img/" . $imgName;
+            ImgStoreManager::deleteImg($book->image);
+        } else {
+            $image = $book->image;
+        }
+
+        $data["image"] = $image;
+        $book->update($data);
+
         $book->update($request->validated());
 
         return redirect()->route("home")
@@ -77,6 +121,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        $imgPath = $book->image;
+        ImgStoreManager::deleteImg(public_path($imgPath));
         $book->delete();
 
         return redirect()->route("home")

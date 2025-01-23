@@ -27,6 +27,7 @@ class StoreBookRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'pages' => 'nullable|integer|min:1',
             'description' => 'nullable|string|max:800',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
@@ -42,6 +43,9 @@ class StoreBookRequest extends FormRequest
             'pages.integer' => 'Il numero di pagine deve essere un numero intero.',
             'pages.min' => 'Il numero di pagine deve essere almeno 1.',
             'description.max' => 'La descrizione non può superare i 800 caratteri.',
+            'image.image' => 'Il file caricato deve essere un\'immagine.',
+            'image.mimes' => 'L\'immagine deve essere in uno dei seguenti formati: jpeg, png, jpg o gif.',
+            'image.max' => 'L\'immagine non può superare i 2MB di dimensione.',
         ];
     }
 }

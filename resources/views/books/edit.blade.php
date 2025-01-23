@@ -10,7 +10,7 @@
 
 @section("page-content")
     <div class="col-md-8">
-        <form action="{{ url('books/' . $book->id) }}" method="POST">
+        <form action="{{ url('books/' . $book->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="mb-3">
@@ -62,6 +62,13 @@
                 <textarea class="form-control" id="description" name="description" rows="4" maxlength="800">{{ old('description', $book->description) }}</textarea>
             </div>
 
+            <div class="mb-3">
+                <label for="description" class="form-label">Immagine</label>
+                <input type="file" class="form-control" id="imageInput" name="image" accept="image/jpeg,image/png,image/gif">
+            </div>
+            <img src="{{old("image", asset($book->image))}}" id="previewImage" style="width: 400px; height: 520px;">
+            <br>
+            <br>
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -72,8 +79,23 @@
                 </div>
             @endif
             <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+            <br>
+            <br>
         </form>
     </div>
+    <script>
+        document.getElementById("imageInput").addEventListener("change", (e) => {
+            let file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const previewImage = document.getElementById("previewImage");
+                    previewImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 @endsection
 
 

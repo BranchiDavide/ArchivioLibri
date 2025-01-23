@@ -8,7 +8,7 @@
     <article class="detail-book row py-3 px-1 rounded-4">
         <div class="col-md-4">
             <figure>
-                <img src="{{ asset('img/no-cover.webp') }}" class="rounded" alt="No Cover">
+                <img src="{{ asset($book->image) }}" class="rounded">
             </figure>
         </div>
         <div class="col-md-8">
